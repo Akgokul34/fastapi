@@ -1,8 +1,14 @@
 from fastapi import FastAPI
+from prediction import get_city_map, predict_price
 
-app=FastAPI()
+app = FastAPI()
 
-@app.get("/")
+@app.get("/api/predict")
+def predict(size,total_sqft,bath,balcony,location):
+    price=list(predict_price(size,total_sqft,bath,balcony,location))[0]
+    return {"message":"Success","data":{"predicted_price":price},"Errorcode":0}
 
-def index():
-    return {"Hi hello World...!"}
+@app.get("/api/citylist")
+def get_city_map_api():
+    city_map=get_city_map()
+    return {"message":"Sucess","Data":city_map,"Errorcode":0}
